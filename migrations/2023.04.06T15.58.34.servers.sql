@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS servers
+(
+    id BIGSERIAL NOT NULL PRIMARY KEY, 
+    uuid UUID NOT NULL, 
+    name TEXT NOT NULL UNIQUE,
+    created_at DATE DEFAULT NOW(),
+    updated_at DATE DEFAULT NOW()
+
+);
