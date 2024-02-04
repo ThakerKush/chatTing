@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-import path from "path";
 import { Dialect } from "sequelize";
 
 declare global {
@@ -17,10 +15,6 @@ declare global {
     }
   }
 }
-
-dotenv.config({
-  path: path.resolve("../../.env"),
-});
 
 const { USERNAME, PASSWORD, DATABASE, HOST, DIALECT, PORT, RHOST, RPORT, SECRET } =
   process.env;

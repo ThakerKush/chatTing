@@ -15,9 +15,10 @@ declare module "ws" {
 }
 
 const server = app.getServer();
+console.log(server);
 
 export const wss: WebSocketServer = new WebSocketServer({ noServer: true });
-
+console.log("socket server started");
 const connections: Map<string, Set<WebSocket>> = new Map();
 
 const getChannelConnNums = () => {
@@ -44,11 +45,11 @@ const broadcastMessageToChannel = (
 wss.on(
   "connection",
   async function (ws: WebSocket.WebSocket, req: IncomingMessage) {
-    const channelId = ws.channelId;
-
     ws.on("error", console.error);
 
-    if (connections.get(channelId)) {
+    const channelId = ws.channelId;
+
+    if (connections.has(channelId)) {
       connections.get(channelId)!.add(ws);
     } else {
       const wsSet: Set<WebSocket> = new Set([ws]);

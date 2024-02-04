@@ -2,8 +2,7 @@
   "name": "chatting",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "Kush Thaker<thakerkush12@gmail.com>",
   "dependencies": {
@@ -15,7 +14,8 @@
     "sequelize": "^6.31.0",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

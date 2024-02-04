@@ -6,16 +6,18 @@ import { AuthRoutes } from "./router/auth";
 import { serverRouts } from "./router/server";
 import { chatRouts } from "./router/chat";
 import errorMiddleware from "./middleware/error";
+import http from "http";
 const authRoutes = new AuthRoutes();
 
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
-  public server: any;
+  public server: http.Server;
 
   constructor(routes: any) {
     this.app = express();
+    this.server = http.createServer(this.app);
     this.env = "DEVELOPMENT";
     this.port = 3000;
     this.connectToDB();
@@ -49,8 +51,8 @@ class App {
   }
 
   public listen() {
-    this.server = this.app.listen(this.port, "0.0.0.0", () => {
-      console.log(`Server is listning on ${this.port}`);
+    this.server.listen(this.port, () => {
+      console.log(`App listening on the port ${PORT}`);
     });
   }
 
