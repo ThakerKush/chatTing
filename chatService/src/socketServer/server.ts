@@ -101,48 +101,50 @@ server.on("upgrade", async function upgrade(request, socket, head) {
     socket,
     head,
     async function done(ws: WebSocket.WebSocket) {
-      ws.channelId = request.url.substring(1); //Make not of this
-      if (!uuidValidate(ws.channelId)) {
-        ws.close(1007, "Invalid Server");
-      }
-      const serverId = await serverService.getServerId(ws.channelId);
-      ws.server = serverId;
-      const cookies = request.headers.cookie.split("; ");
-      const authCookie = cookies.find((cookie) =>
-        cookie.startsWith("Authorization=")
-      );
-      const token = authCookie ? authCookie.split("=")[1] : null;
-      const decodedData = await jwt.verify(
-        token,
-        "somePrivateKey",
-        async (error, decoded) => {
-          if (error) {
-            if (error["message"] === "jwt expired") {
-              ws.close(1007, "JWT_EXPIRED");
-            } else {
-              console.log("[JWT_ERROR]:", error);
+      try {
+        ws.channelId = request.url.substring(1); //Make not of this
 
-              console.log("INVALID_JWT");
-            }
-          } else {
-            const user = await DB.user.findByPk(decoded.id);
-            if (!user) {
-              console.log("user not found");
-            } else {
-              ws.AuthUser = user["id"];
-              const exists = await serverService.checkUser({
-                userId: ws.AuthUser,
-                uuid: ws.channelId,
-              });
-              if (exists) {
-                wss.emit("connection", ws, request);
-              } else {
-                ws.close(1007, "NotaPartOfServer");
-              }
-            }
-          }
+        if (!uuidValidate(ws.channelId)) {
+          ws.close(1007, "Invalid Server");
         }
-      );
+
+        const serverId = await serverService.getServerId(ws.channelId);
+        ws.server = serverId;
+        const cookies = request.headers.cookie.split("; ");
+        const authCookie = cookies.find((cookie) =>
+          cookie.startsWith("Authorization=")
+        );
+        const token = authCookie ? authCookie.split("=")[1].slice(0, -1) : null;
+        const decodedData = await jwt.verify(token, "somePrivateKey");
+        const user = await DB.user.findByPk(decodedData.id);
+
+        if (!user) {
+          ws.close(1007, "User not found");
+          throw new Error("User not found");
+        }
+
+        ws.AuthUser = user["id"];
+        const exists = await serverService.checkUser({
+          userId: ws.AuthUser,
+          uuid: ws.channelId,
+        });
+        if (!exists) {
+          ws.close(1007, "NotaPartOfServer");
+        }
+        wss.emit("connection", ws, request);
+      } catch (error) {
+        console.error("Error while upgrading connection", error);
+
+        if (error["message"] === "jwt expired") {
+          ws.close(1007, "JWT_EXPIRED");
+        } else {
+          console.log("[JWT_ERROR]:", error);
+
+          ws.close(1007, "INVALID_JWT");
+        }
+
+        socket.destroy();
+      }
     }
   );
 });

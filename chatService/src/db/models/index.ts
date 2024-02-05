@@ -16,7 +16,6 @@ import {
   RPORT,
 } from "../../config/index";
 
-
 export const RDB = new Redis({
   host: RHOST,
   port: Number(RPORT),
@@ -31,9 +30,7 @@ interface DB {
   messages: ModelStatic<MessageInstance>;
 }
 
-
-
-export const DB: DB = {};
+const DB: DB = {};
 
 const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
   host: HOST,
