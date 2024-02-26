@@ -25,12 +25,12 @@ jobs:
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
       - run: |
-          cd ${{env.chat-service}}
+          cd chatService
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
         shell: bash
       - run: |
-          cd ${{env.syncing-service}}
+          cd syncingService
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
         shell: bash
