@@ -1,0 +1,16 @@
+FROM node:20-alpine3.18 AS base
+
+WORKDIR /app
+ADD . /app
+
+FROM base AS build
+RUN --mount=type=cache,target=/root/.npm npm install
+RUN npm run build
+
+FROM base AS prod 
+RUN npm install --production 
+COPY --from=build /app/dist /app/dist
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

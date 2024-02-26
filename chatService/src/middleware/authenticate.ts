@@ -5,7 +5,7 @@ import { SECRET } from "../config/index";
 const authenticate = async (request, response, next) => {
   const token = request.cookies["Authorization"];
   try {
-    const decodedData = await jwt.verify(token, SECRET);
+    const decodedData: any = await jwt.verify(token, SECRET);
     const user = await DB.user.findByPk(decodedData.id);
     if (!user) {
       response.status(400).status("user not found");

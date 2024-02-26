@@ -115,7 +115,7 @@ server.on("upgrade", async function upgrade(request, socket, head) {
           cookie.startsWith("Authorization=")
         );
         const token = authCookie ? authCookie.split("=")[1].slice(0, -1) : null;
-        const decodedData = await jwt.verify(token, "somePrivateKey");
+        const decodedData: any = await jwt.verify(token, "somePrivateKey");
         const user = await DB.user.findByPk(decodedData.id);
 
         if (!user) {

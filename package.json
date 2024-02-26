@@ -3,6 +3,7 @@
     "@slonik/migrator": "^0.11.3"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "jsonwebtoken": "^9.0.2"
   }
 }

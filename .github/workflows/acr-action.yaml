@@ -1,0 +1,34 @@
+name: Workflow name
+
+on:
+  release:
+    types: [published]
+env:
+  chat-service: chatService
+  syncing-service: syncingService
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    env:
+      chat-service: chatservice
+      syncing-service: syncingservice
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "Build and push image for chat service"
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_PUSH_USERNAME }}
+          password: ${{ secrets.ACR_PUSH_PASS }}
+      - run:
+          cd ${{env.chat-service}}
+          docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
+      - run: 
+          cd ${{env.syncing-service}}
+          docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}

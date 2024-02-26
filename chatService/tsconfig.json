@@ -10,7 +10,7 @@
     "module": "commonjs",
     "pretty": true,
     "sourceMap": true,
-    "outDir": "./out",
+    "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true,

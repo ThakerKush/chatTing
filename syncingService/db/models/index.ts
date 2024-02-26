@@ -1,13 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { Sequelize } from "sequelize";
+import { Sequelize, ModelStatic, DataTypes } from "sequelize";
 import Redis from "ioredis";
+import { MessageInstance } from "./messages";
 const basename = path.basename(__filename);
-
-export const RDB = new Redis({
-  host: "localhost",
-  port: 6379,
-});
 
 import {
   USERNAME,
@@ -16,9 +12,24 @@ import {
   HOST,
   DIALECT,
   PORT,
+  RHOST,
+  RPORT,
 } from "../../config/index";
 
-const DB: any = {};
+export const RDB = new Redis({
+  host: RHOST,
+  port: Number(RPORT),
+});
+
+interface DB {
+  sequelize: Sequelize;
+  Sequelize: typeof Sequelize;
+  messages: ModelStatic<MessageInstance>;
+  server: any;
+  user: any;
+}
+//@ts-expect-error
+const DB: DB = {};
 
 const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
   host: HOST,
@@ -40,17 +51,21 @@ fs.readdirSync(__dirname)
   .forEach((file) => {
     const model = require(path.join(__dirname, file))(
       DB.sequelize,
-      DB.Sequelize.DataTypes
+
+      DataTypes
     );
+    //@ts-expect-error
     DB[model.name] = model;
   });
 
 Object.keys(DB).forEach((modelName) => {
+  //@ts-expect-error
   if (DB[modelName].associate) {
+    //@ts-expect-error
     DB[modelName].associate(DB);
   }
 });
 
-DB.messages = require("./messages")(DB.sequelize, DB.Sequelize.DataTypes);
+DB.messages = require("./messages")(DB.sequelize, DataTypes);
 
 export { DB };
