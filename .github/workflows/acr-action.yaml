@@ -11,8 +11,8 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     env:
-      chat-service: "chatService"
-      syncing-service: "syncingService"
+      chat-service: ${{ 'chatService' }}
+      syncing-service: ${{ 'syncingService' }}
 
     steps:
       - name: "Checkout code"
@@ -25,12 +25,12 @@ jobs:
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
       - run: |
-          cd chatService
+          cd ${{env.chat-service}}
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
         shell: bash
       - run: |
-          cd syncingService
+          cd ${{env.syncing-service}}
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
         shell: bash
