@@ -24,11 +24,11 @@ jobs:
           login-server: ${{ secrets.ACR_LOGIN_SERVER }}
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
-      - run:
+      - run: |
           cd ${{env.chat-service}}
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
-      - run: 
+      - run: |
           cd ${{env.syncing-service}}
           docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
