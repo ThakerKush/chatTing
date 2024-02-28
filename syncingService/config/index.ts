@@ -12,13 +12,10 @@ declare global {
       DIALECT: Dialect;
       PORT: string;
       RHOST: string;
-      RPORT: string; 
+      RPORT: string;
     }
-
   }
-  
 }
-
 
 const { USERNAME, PASSWORD, DATABASE, HOST, DIALECT, PORT, RHOST, RPORT } =
   process.env;

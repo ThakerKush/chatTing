@@ -12,8 +12,10 @@ declare global {
       RPORT: string;
       RHOST: string;
       SECRET: string;
+    
     }
   }
+  
 }
 
 const {
