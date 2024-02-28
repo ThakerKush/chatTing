@@ -22,6 +22,6 @@ jobs:
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
       - run: |
-          cd ${{env.syncing-service}}
-          echo "Building image for chat service"
+            docker build ./${{env.syncing-service}} -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
+            docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.syncing-service}}:${{ github.event.release.tag_name }}
 
