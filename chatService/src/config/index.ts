@@ -11,13 +11,11 @@ declare global {
       PORT: string;
       RPORT: string;
       RHOST: string;
-      SECRET: string;
-      
-
-      
+      SECRET: string;  
     }
   }
 }
+
 
 const { USERNAME, PASSWORD, DATABASE, HOST, DIALECT, PORT, RHOST, RPORT, SECRET } =
   process.env;

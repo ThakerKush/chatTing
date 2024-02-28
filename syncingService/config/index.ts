@@ -12,9 +12,7 @@ declare global {
       DIALECT: Dialect;
       PORT: string;
       RHOST: string;
-      RPORT: string;
-
-      
+      RPORT: string; 
     }
   }
 }
