@@ -14,7 +14,9 @@ declare global {
       RHOST: string;
       RPORT: string; 
     }
+
   }
+  
 }
 
 
