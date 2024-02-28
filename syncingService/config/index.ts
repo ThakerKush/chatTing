@@ -13,6 +13,8 @@ declare global {
       PORT: string;
       RHOST: string;
       RPORT: string;
+
+      
     }
   }
 }
