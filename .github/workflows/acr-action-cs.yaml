@@ -4,7 +4,7 @@ on:
     branches:
       - production
     paths:
-      - 'chatService/**'
+      - "chatService/**"
 
 jobs:
   build-and-push:
@@ -23,6 +23,6 @@ jobs:
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
       - run: |
-          docker build ./${{env.chat-service}} -t ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{env.chat-service}}:${{ github.event.release.tag_name }}
-
+          docker build ./${{env.chat-service}} -t ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:${{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:latest
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:${{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:${{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/chat-service:latest
