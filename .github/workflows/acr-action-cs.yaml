@@ -1,0 +1,28 @@
+name: Deploy chat-service
+on:
+  push:
+    branches:
+      - production
+    paths:
+      - 'chatService/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    env:
+      chat-service: ${{ 'chatService' }}
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "Build and push image for chat service"
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_PUSH_USERNAME }}
+          password: ${{ secrets.ACR_PUSH_PASS }}
+      - run: |
+          cd ${{env.chat-service}}
+          echo "Building image for chat service"
+

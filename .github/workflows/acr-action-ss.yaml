@@ -1,17 +1,14 @@
-name: Workflow name
-
+name: Deploy syncing-service
 on:
-  release:
-    types: [published]
-env:
-  chat-service: chatService
-  syncing-service: syncingService
-
+  push:
+    branches:
+      - production
+    paths:
+      - 'syncingService/**'
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     env:
-      chat-service: ${{ 'chatService' }}
       syncing-service: ${{ 'syncingService' }}
 
     steps:
@@ -25,9 +22,6 @@ jobs:
           username: ${{ secrets.ACR_PUSH_USERNAME }}
           password: ${{ secrets.ACR_PUSH_PASS }}
       - run: |
-          cd ${{env.chat-service}}
+          cd ${{env.syncing-service}}
           echo "Building image for chat service"
 
-      - run: |
-          cd ${{env.syncing-service}}
-          echo "Building image for syncing service"
